@@ -51,8 +51,7 @@ streamlit-ollama-llm/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/streamlit-ollama-llm.git
-cd streamlit-ollama-llm
+git clone https://github.com/Huzaifa206/arch-technologies-internship
 ```
 
 ### 2. Install dependencies
