@@ -15,7 +15,7 @@
 
 ### Arch Technologies · Karachi, Pakistan
 
-**Intern:** Muhammad Huzaifa &nbsp;|&nbsp; **Program:** Generative AI Engineering &nbsp;|&nbsp; **Year:** 2025
+**Intern:** Huzaifa Ahmed Siddiqui &nbsp;|&nbsp; **Domain:** Generative AI &nbsp;|&nbsp; **Year:** 2026
 
 <br/>
 
@@ -47,12 +47,10 @@ The work spans a wide stack: **Streamlit**, **Ollama**, **Unsloth**, **QLoRA**, 
 
 | Field | Details |
 |---|---|
-| **Name** | Muhammad Huzaifa |
-| **Degree** | BS Artificial Intelligence — Bahria University, Karachi |
+| **Name** | Huzaifa Ahmed Siddiqui |
 | **Organization** | Arch Technologies |
-| **Program** | Generative AI Engineering Internship |
-| **Location** | Karachi, Pakistan |
-| **GitHub** | [@huzaifa](https://github.com/) |
+| **Domain** | Generative AI Internship |
+| **GitHub** | [@huzaifa206](https://github.com/) |
 
 <br/>
 
