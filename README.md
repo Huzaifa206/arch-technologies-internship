@@ -15,7 +15,7 @@
 
 ### Arch Technologies · Karachi, Pakistan
 
-**Intern:** Huzaifa Ahmed Siddiqui &nbsp;|&nbsp; **Domain:** Generative AI &nbsp;|&nbsp; **Year:** 2026
+**Intern:** Huzaifa Ahmed Siddiqui &nbsp;|&nbsp; **Intern ID:** `ARCH-2603-1066` &nbsp;|&nbsp; **Domain:** Generative AI &nbsp;|&nbsp; **Year:** 2026
 
 <br/>
 
@@ -25,7 +25,9 @@
 ![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)
 ![Google Colab](https://img.shields.io/badge/Google%20Colab-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white)
 ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
 ![OpenAI Whisper](https://img.shields.io/badge/Whisper-412991?style=for-the-badge&logo=openai&logoColor=white)
+![WandB](https://img.shields.io/badge/Weights%20&%20Biases-FFBE00?style=for-the-badge&logo=weightsandbiases&logoColor=black)
 
 <br/>
 
@@ -35,9 +37,9 @@
 
 ## 📌 About This Repository
 
-This repository contains all **four tasks** completed during my **Generative AI Engineering Internship** at **Arch Technologies**. Each task was designed to build hands-on experience with modern AI tooling — from local LLM deployment and efficient fine-tuning, to retrieval-augmented generation and speech-to-reasoning pipelines.
+This repository contains all **four tasks** completed during my **Generative AI Engineering Internship** at **Arch Technologies**. Each task was a hands-on implementation built from scratch — from deploying a local LLM chat interface, to fine-tuning a medical reasoning model with QLoRA, building a full RAG pipeline, and finally creating an end-to-end speech-to-reasoning system.
 
-The work spans a wide stack: **Streamlit**, **Ollama**, **Unsloth**, **QLoRA**, **FAISS**, **Whisper**, and quantized transformer models — all targeting real-world, memory-efficient AI deployment scenarios.
+The stack spans **Streamlit**, **Ollama**, **Unsloth**, **QLoRA**, **LangChain**, **FAISS**, **Whisper**, and **quantized transformer models** — all targeting real-world, memory-efficient AI deployment.
 
 <br/>
 
@@ -48,6 +50,8 @@ The work spans a wide stack: **Streamlit**, **Ollama**, **Unsloth**, **QLoRA**, 
 | Field | Details |
 |---|---|
 | **Name** | Huzaifa Ahmed Siddiqui |
+| **Intern ID** | `ARCH-2603-1066` |
+| **Degree** | BS Artificial Intelligence — Bahria University, Karachi |
 | **Organization** | Arch Technologies |
 | **Domain** | Generative AI Internship |
 | **GitHub** | [@huzaifa206](https://github.com/) |
@@ -61,23 +65,19 @@ The work spans a wide stack: **Streamlit**, **Ollama**, **Unsloth**, **QLoRA**, 
 ```
 📦 arch-genai-internship/
 ├── 📁 Task-01-Streamlit-LLM-Interface/
-│   ├── app.py
-│   ├── requirements.txt
-│   └── README.md
+│   ├── main.py
+│   └── requirements.txt
 │
 ├── 📁 Task-02-Medical-Finetuning-QLoRA/
-│   ├── medical_finetune_unsloth.ipynb
-│   └── README.md
+│   └── Task_2.ipynb
 │
 ├── 📁 Task-03-RAG-Dynamic-4bit/
-│   ├── rag_pipeline_unsloth.ipynb
-│   └── README.md
+│   └── Task_3.ipynb
 │
-├── 📁 Task-04-Speech-to-Reasoning-Pipeline/
-│   ├── whisper_llm_pipeline.ipynb
-│   └── README.md
+├── 📁 Task-04-Speech-to-Reasoning/
+│   └── Task4.ipynb
 │
-└── 📄 README.md  ← you are here
+└── 📄 README.md
 ```
 
 <br/>
@@ -90,23 +90,44 @@ The work spans a wide stack: **Streamlit**, **Ollama**, **Unsloth**, **QLoRA**, 
 
 ### `TASK 01` — Streamlit Interface for Local LLM Inference
 
-> **Stack:** Python · Streamlit · Ollama · REST API
+> **File:** `main.py` &nbsp;|&nbsp; **Stack:** Python · Streamlit · Ollama · `qwen2.5:3b`
 
 #### 📋 Overview
-Built a fully interactive **Streamlit web interface** that connects to a locally hosted large language model running via **Ollama**. The app provides a clean chat-style interface directly in the browser, with no cloud dependency — everything runs on-device.
+Built a fully interactive **Streamlit chat interface** that connects to a locally hosted LLM via **Ollama**, using the **Qwen 2.5 3B** model. Everything runs on-device with zero cloud dependency. The interface mimics a polished chat app with real-time streaming output.
 
-#### ⚙️ What Was Implemented
-- **Text Input Box** — User can type any query and submit it to the local LLM
-- **Response Area** — Displays model-generated answers in real time using streaming output
-- **Conversation History Panel** — Retains the full chat session so users can scroll back through prior exchanges
-- **Reset Button** — Clears the conversation and starts a fresh session with one click
-- **Ollama API Integration** — Streamlit communicates with the LLM backend through Ollama's local REST endpoint (`http://localhost:11434`)
+#### ⚙️ Implementation Details
 
-#### 🧠 Key Concepts Learned
-- Local LLM deployment and serving via Ollama
-- Streamlit session state management for multi-turn conversations
-- Building frontend-to-backend communication without a cloud dependency
-- Designing a minimal but usable chat UI in pure Python
+**Model & Backend**
+- Model served locally via Ollama: `qwen2.5:3b`
+- Used `ollama.chat()` with `stream=True` for real-time token-by-token streaming
+- Full conversation history is passed on every call to preserve multi-turn context
+
+**Frontend Features**
+- **Streaming Response** — Tokens appear live with a `▌` cursor indicator while generating, replaced with the final clean output once done
+- **Conversation History Panel** — `st.session_state.messages` maintains the full chat session and feeds it into every Ollama call for proper memory
+- **Clear Conversation Button** — Sidebar button resets messages to `[]` and calls `st.rerun()` for an instant fresh session
+- **Sidebar Info Panel** — Displays developer name (`Huzaifa`), intern ID (`ARCH-2603-1066`), and the active model
+- **Error Handling** — Wrapped in `try/except`; shows a friendly `st.error()` if Ollama isn't running locally
+
+#### 📦 Key Libraries
+```
+streamlit
+ollama
+```
+
+#### ▶️ How to Run
+```bash
+# 1. Pull the model via Ollama
+ollama pull qwen2.5:3b
+
+# 2. Install dependencies
+pip install streamlit ollama
+
+# 3. Launch the app
+streamlit run main.py
+```
+
+> Make sure Ollama is running in the background (`ollama serve`) before launching the app.
 
 <br/>
 
@@ -114,25 +135,56 @@ Built a fully interactive **Streamlit web interface** that connects to a locally
 
 ### `TASK 02` — Medical Fine-tuning with QLoRA & Unsloth
 
-> **Stack:** Python · Unsloth · QLoRA · Llama 3 / DeepSeek-R1 · Google Colab · HuggingFace
+> **File:** `Task_2.ipynb` &nbsp;|&nbsp; **Stack:** Unsloth · QLoRA · DeepSeek-R1-Distill-Llama-8B · WandB · Google Colab
 
 #### 📋 Overview
-Implemented a full **QLoRA-based fine-tuning workflow** for a medical language model using **Unsloth's** optimized training framework inside Google Colab. The goal was to adapt a general-purpose base model to a specialized medical Q&A domain — efficiently, within Colab's VRAM constraints.
+Implemented a complete **QLoRA fine-tuning pipeline** on the **DeepSeek-R1-Distill-Llama-8B** model using Unsloth, trained on a medical chain-of-thought reasoning dataset. The entire workflow — dataset loading, tokenization, LoRA setup, training, adapter saving, and inference testing — is contained in a single Colab notebook.
 
-#### ⚙️ What Was Implemented
-- **Dataset Loading** — Loaded a domain-specific medical dataset (clinical Q&A pairs) from HuggingFace
-- **4-bit Quantization Setup** — Configured Unsloth to load the base model (Llama 3 / DeepSeek-R1) in **4-bit quantized** format to drastically reduce memory usage
-- **LoRA Adapter Configuration** — Set up low-rank adaptation layers (rank, alpha, target modules) for parameter-efficient training
-- **Tokenization Pipeline** — Applied instruction-format tokenization tailored to medical prompt templates
-- **Epoch-based Training** — Ran the training loop with loss monitoring across multiple epochs
-- **Memory Monitoring** — Tracked GPU VRAM usage in Colab throughout the training run
-- **Adapter Saving & Testing** — Saved the fine-tuned LoRA adapter and tested it against new, unseen medical queries
+#### ⚙️ Implementation Details
 
-#### 🧠 Key Concepts Learned
-- PEFT (Parameter-Efficient Fine-Tuning) using LoRA
-- 4-bit quantization for memory-efficient training (QLoRA)
-- Domain adaptation of large language models
-- Working within Colab's resource constraints using Unsloth's speed optimizations
+**Model Loading**
+- Base model: `unsloth/DeepSeek-R1-Distill-Llama-8B`
+- Loaded via **ModelScope** (`UNSLOTH_USE_MODELSCOPE=1`) as a reliable fallback to HuggingFace
+- Quantized with `load_in_4bit=True`, `max_seq_length=2048`
+
+**LoRA Adapter Configuration**
+- Rank: `r=16`, Alpha: `lora_alpha=16`
+- Target modules: `q_proj`, `k_proj`, `v_proj`, `o_proj`, `gate_proj`, `up_proj`, `down_proj`
+- Dropout: `0`, Bias: `none` (Unsloth-optimized defaults)
+- Gradient checkpointing: `"unsloth"` mode — critical for saving VRAM on long sequences
+
+**Dataset**
+- Source: `FreedomIntelligence/medical-o1-reasoning-SFT` (English config, first 500 samples)
+- Prompt format: Instruction → Question → `<think>` Chain-of-Thought `</think>` → Response
+- Tokenized in batched mode with `EOS_TOKEN` appended to every sample
+
+**Training Config — `SFTTrainer` + `SFTConfig`**
+
+| Parameter | Value |
+|---|---|
+| Batch size per device | `2` |
+| Gradient accumulation | `4` steps (effective batch = 8) |
+| Epochs | `1` |
+| Learning rate | `2e-4` |
+| Optimizer | `adamw_8bit` |
+| LR Scheduler | `linear` |
+| Precision | `bf16` (if supported), else `fp16` |
+| Warmup steps | `5` |
+| Logging | Every `10` steps → **WandB** (project: `medical-qlora-unsloth`) |
+
+**Memory Monitoring**
+- GPU name, total VRAM, and reserved VRAM logged before and after training
+- LoRA-specific memory delta calculated and reported
+
+**Adapter Saving & Inference**
+- Adapter saved locally to `./medical_qlora_adapter/`
+- Inference enabled with `FastLanguageModel.for_inference(model)` for 2x faster generation
+- Tested on a clinical scenario: 65-year-old male with sudden right-sided weakness and speech difficulty
+
+#### 📦 Key Libraries
+```
+unsloth · trl · peft · datasets · wandb · huggingface_hub · modelscope · torch
+```
 
 <br/>
 
@@ -140,24 +192,40 @@ Implemented a full **QLoRA-based fine-tuning workflow** for a medical language m
 
 ### `TASK 03` — RAG Pipeline with Unsloth Dynamic 4-bit Quantization
 
-> **Stack:** Python · Unsloth · Dynamic 4-bit Quant · FAISS / LangChain · Google Colab
+> **File:** `Task_3.ipynb` &nbsp;|&nbsp; **Stack:** Unsloth · LangChain · FAISS · Sentence Transformers · Llama-3-8B-Instruct · Google Colab
 
 #### 📋 Overview
-Built a complete **Retrieval-Augmented Generation (RAG)** pipeline inside a Google Colab notebook, powered by an **Unsloth dynamic 4-bit quantized** model. Instead of relying solely on a model's parametric knowledge, this system retrieves relevant document chunks at inference time and feeds them into the LLM as grounded context.
+Built a complete **Retrieval-Augmented Generation (RAG)** pipeline powered by a **4-bit quantized Llama-3-8B-Instruct** model. The system chunks and indexes documents into a FAISS vector store, retrieves the top relevant chunks at query time, and injects them into the LLM's prompt for grounded, document-faithful answers — running as an interactive Q&A assistant in Colab.
 
-#### ⚙️ What Was Implemented
-- **Dynamic Quant Model Loading** — Loaded an `unsloth-bnb-4bit` variant that selectively preserves precision for critical model parameters while quantizing the rest
-- **Document Indexing** — Chunked and embedded domain-specific documents into a vector index for efficient retrieval
-- **Retrieval Logic** — Built similarity-search retrieval to fetch the top-k most relevant chunks given a user query
-- **RAG Integration** — Constructed a pipeline where retrieved chunks are injected into the LLM's prompt as context before generation
-- **Memory Optimization** — Carefully managed VRAM usage to fit both the retriever and the quantized LLM within Colab's GPU limits
-- **End-to-End Testing** — Validated grounded response generation against document-based queries
+#### ⚙️ Implementation Details
 
-#### 🧠 Key Concepts Learned
-- RAG architecture and its advantages over pure parametric generation
-- Dynamic 4-bit quantization and its precision-preservation strategy
-- Vector-based document retrieval (FAISS / embedding similarity)
-- Prompt engineering for context injection in RAG setups
+**Model Loading**
+- Model: `unsloth/llama-3-8b-Instruct-bnb-4bit` — pre-quantized 4-bit Instruct variant
+- Loaded with `load_in_4bit=True`, `max_seq_length=2048`
+- Immediately set to inference mode: `FastLanguageModel.for_inference(model)`
+
+**Document Processing & Vector Store**
+- Document: custom company knowledge base (embedded inline in the notebook)
+- Chunked with `RecursiveCharacterTextSplitter`: `chunk_size=100`, `chunk_overlap=20`
+- Embedded using `sentence-transformers/all-MiniLM-L6-v2` via `HuggingFaceEmbeddings`
+- Indexed into a **FAISS** vector store; retriever returns top `k=2` relevant chunks per query
+
+**RAG Pipeline — `ask_rag_pipeline(query)`**
+1. Calls `retriever.invoke(query)` → fetches 2 semantically closest document chunks
+2. Joins chunks into a `context` string
+3. Constructs a grounded prompt: *"Use only the context below to answer. If the answer isn't there, say 'I don't know.'"*
+4. Tokenizes and sends to CUDA, generates up to `150` new tokens
+5. Decodes output and splits on `"Answer:\n"` to isolate the model's reply cleanly
+
+**Interactive Loop**
+- Runs a `while True` input loop for live Q&A directly in the Colab cell
+- Exits on `"exit"` / `"quit"`, skips blank inputs
+
+#### 📦 Key Libraries
+```
+unsloth · langchain · langchain-community · langchain-huggingface
+faiss-cpu · sentence-transformers · pypdf · transformers · torch
+```
 
 <br/>
 
@@ -165,42 +233,64 @@ Built a complete **Retrieval-Augmented Generation (RAG)** pipeline inside a Goog
 
 ### `TASK 04` — Speech-to-Reasoning Pipeline with Whisper & Quantized LLM
 
-> **Stack:** Python · OpenAI Whisper · Unsloth Dynamic 4-bit · Llama / Qwen · Google Colab
+> **File:** `Task4.ipynb` &nbsp;|&nbsp; **Stack:** Whisper-small · Qwen2.5-7B-Instruct · Unsloth · gTTS · Google Colab
 
 #### 📋 Overview
-Designed and implemented an **end-to-end speech-to-reasoning pipeline** in a single Google Colab notebook. The system first transcribes spoken audio using **OpenAI's Whisper** ASR model, then feeds the transcription directly into a **quantized reasoning LLM** (Unsloth dynamic 4-bit) to produce a logical, grounded response — turning voice into reasoning in one seamless flow.
+Built an **end-to-end speech-to-reasoning pipeline** in a single Colab notebook. **OpenAI Whisper** transcribes a spoken audio clip into text, which is then passed to a **Qwen 2.5 7B** quantized reasoning model that generates a structured, step-by-step logical response. A `gTTS`-generated `.mp3` file serves as the test input, making the whole pipeline self-contained and reproducible.
 
-#### ⚙️ What Was Implemented
-- **Whisper ASR Integration** — Loaded and configured OpenAI Whisper to process raw audio input and produce accurate text transcriptions
-- **Audio Preprocessing** — Handled audio encoding, sampling rate normalization, and batching for Whisper's input requirements
-- **Quantized LLM Setup** — Loaded a fine-tuned, dynamic 4-bit quantized reasoning model (Llama or Qwen variant via Unsloth) with full GPU offloading
-- **Transcription-to-Prompt Pipeline** — Passed Whisper's output directly as a structured prompt into the LLM's reasoning workflow
-- **GPU Memory Management** — Coordinated VRAM usage across two models (Whisper + LLM) within Colab's constraints
-- **End-to-End Demo** — Demonstrated the full pipeline working on a sample audio query, from spoken input to reasoned text output
+#### ⚙️ Implementation Details
 
-#### 🧠 Key Concepts Learned
-- Automatic Speech Recognition (ASR) with Whisper
-- Multi-model pipeline design and GPU memory coordination
-- Connecting ASR output to LLM prompt engineering
-- Efficient batching and encoding strategies for audio-to-text-to-reasoning workflows
+**Environment Setup**
+- VRAM cleared upfront with `torch.cuda.empty_cache()` + `gc.collect()` before loading either model
+- Both models loaded sequentially to keep peak memory usage manageable
+
+**Step 1 — Whisper ASR**
+- Model: `openai/whisper-small` via HuggingFace `pipeline("automatic-speech-recognition")`
+- Pushed to CUDA with `torch.float16` for memory-efficient inference
+- Returns a `{"text": "..."}` dict with the full transcription
+
+**Step 2 — Quantized Reasoning LLM**
+- Model: `unsloth/Qwen2.5-7B-Instruct-bnb-4bit` (dynamic 4-bit quantized)
+- Loaded with `load_in_4bit=True`, `max_seq_length=2048`
+- Inference optimized: `FastLanguageModel.for_inference(model)`
+
+**Test Audio Generation**
+- `gTTS` converts a medical text query to `sample_query.mp3`
+- Audio player rendered inline in Colab via `IPython.display.Audio`
+- Demo query: *"A patient presents with severe headache, stiff neck, high fever, and sensitivity to light — most likely diagnosis and immediate test to order?"*
+
+**Full Pipeline — `speech_to_reasoning(audio_path)`**
+1. **ASR** — Passes audio to Whisper, extracts `transcribed_text`
+2. **Prompt Construction** — Wraps transcription in Qwen's chat template with system prompt: *"You are a logical reasoning medical assistant. Always break down your thought process step-by-step before providing a final answer."*
+3. **Template Application** — `tokenizer.apply_chat_template()` with `add_generation_prompt=True`
+4. **Generation** — Generates up to `500` new tokens with `use_cache=True`, `pad_token_id=tokenizer.eos_token_id`
+5. **Output Cleaning** — Splits decoded output on `"assistant\n"` to isolate the model's reasoning chain and final answer
+
+#### 📦 Key Libraries
+```
+unsloth · transformers · torch · gTTS · librosa · soundfile · IPython
+```
 
 <br/>
 
 ---
 
-## 🛠️ Tech Stack — Full Overview
+## 🛠️ Full Tech Stack
 
-| Category | Tools & Libraries |
+| Category | Tools / Models |
 |---|---|
-| **LLM Serving** | Ollama, HuggingFace Transformers |
-| **Fine-tuning** | Unsloth, QLoRA, PEFT, TRL |
-| **Quantization** | BitsAndBytes (4-bit), Unsloth Dynamic Quant |
-| **RAG** | FAISS, LangChain, Sentence Transformers |
-| **Speech (ASR)** | OpenAI Whisper |
+| **LLM Serving (Local)** | Ollama, `qwen2.5:3b` |
+| **LLM Models (Colab)** | DeepSeek-R1-Distill-Llama-8B, Llama-3-8B-Instruct, Qwen2.5-7B-Instruct |
+| **Efficient Fine-tuning** | Unsloth, QLoRA, PEFT, TRL (SFTTrainer + SFTConfig) |
+| **Quantization** | BitsAndBytes 4-bit, Unsloth `bnb-4bit` variants |
+| **RAG Stack** | LangChain, FAISS, Sentence Transformers (`all-MiniLM-L6-v2`) |
+| **Speech Recognition** | OpenAI Whisper (`whisper-small`, fp16 on CUDA) |
+| **TTS (Test Audio)** | gTTS (Google Text-to-Speech) |
 | **Frontend** | Streamlit |
-| **Training Env** | Google Colab (T4 / A100 GPU) |
-| **Languages** | Python |
-| **Base Models** | Llama 3, DeepSeek-R1, Qwen |
+| **Experiment Tracking** | Weights & Biases — project: `medical-qlora-unsloth` |
+| **Training Environment** | Google Colab (T4 / A100 GPU) |
+| **Model Sources** | HuggingFace Hub, ModelScope |
+| **Language** | Python |
 
 <br/>
 
@@ -208,34 +298,25 @@ Designed and implemented an **end-to-end speech-to-reasoning pipeline** in a sin
 
 ## 🚀 Getting Started
 
-### Prerequisites
-```bash
-python >= 3.10
-pip
-git
-ollama  # For Task 01
-```
-
-### Clone the Repository
-```bash
-git clone https://github.com/huzaifa/arch-genai-internship.git
-cd arch-genai-internship
-```
-
 ### Task 01 — Run Locally
+
 ```bash
-cd Task-01-Streamlit-LLM-Interface
-pip install -r requirements.txt
+# Pull the model
+ollama pull qwen2.5:3b
 
-# Make sure Ollama is running with a model pulled
-ollama pull llama3
+# Install dependencies
+pip install streamlit ollama
 
-# Launch the app
-streamlit run app.py
+# Run the app
+streamlit run main.py
 ```
 
 ### Tasks 02, 03, 04 — Run in Google Colab
-Open the respective `.ipynb` notebook in Google Colab, set the runtime to **GPU (T4 or higher)**, and run all cells sequentially.
+
+1. Open the `.ipynb` in **Google Colab**
+2. Go to **Runtime → Change runtime type → GPU** (T4 or better)
+3. For Task 02: add `HF_TOKEN` and `wnb` keys under **Colab Secrets**
+4. Run all cells sequentially from top to bottom
 
 <br/>
 
@@ -244,23 +325,17 @@ Open the respective `.ipynb` notebook in Google Colab, set the runtime to **GPU 
 ## 📈 Skills Developed
 
 ```
-Local LLM Deployment     ████████████░░  Advanced
-Streamlit Development    ████████████░░  Advanced
-QLoRA / PEFT             ███████████░░░  Intermediate–Advanced
-4-bit Quantization       ███████████░░░  Intermediate–Advanced
-RAG Pipeline Design      ██████████░░░░  Intermediate
-Whisper ASR Integration  ██████████░░░░  Intermediate
-GPU Memory Optimization  █████████░░░░░  Intermediate
-Multi-model Pipelines    █████████░░░░░  Intermediate
+Local LLM Deployment         ████████████░░  Advanced
+Streamlit Development        ████████████░░  Advanced
+QLoRA / PEFT Fine-tuning     ████████████░░  Advanced
+4-bit Quantization           ███████████░░░  Intermediate–Advanced
+RAG Pipeline Design          ███████████░░░  Intermediate–Advanced
+LangChain + FAISS            ██████████░░░░  Intermediate
+Whisper ASR Integration      ██████████░░░░  Intermediate
+Multi-model Pipeline Design  ██████████░░░░  Intermediate
+GPU Memory Optimization      █████████░░░░░  Intermediate
+WandB Experiment Tracking    █████████░░░░░  Intermediate
 ```
-
-<br/>
-
----
-
-## 🏢 About Arch Technologies
-
-**Arch Technologies** is a Karachi-based technology company focused on delivering AI-driven solutions and training the next generation of AI engineers in Pakistan. This internship program provided structured, project-based learning across the full generative AI stack.
 
 <br/>
 
@@ -268,7 +343,7 @@ Multi-model Pipelines    █████████░░░░░  Intermediat
 
 ## 📄 License
 
-This repository is for educational and portfolio purposes as part of an internship program. All tasks were completed under the supervision of **Arch Technologies**.
+This repository is for **educational and portfolio purposes** as part of the Arch Technologies Generative AI Internship. All tasks were completed under the supervision of Arch Technologies.
 
 <br/>
 
@@ -276,9 +351,9 @@ This repository is for educational and portfolio purposes as part of an internsh
 
 <div align="center">
 
-**Muhammad Huzaifa** · BS Artificial Intelligence · Bahria University Karachi
+** Huzaifa Ahmed Siddiqui** &nbsp;·&nbsp; `ARCH-2603-1066` &nbsp;·&nbsp; BS Artificial Intelligence · Bahria University Karachi
 
-*Generative AI Internship · Arch Technologies · 2025*
+*Generative AI Internship &nbsp;·&nbsp; Arch Technologies &nbsp;·&nbsp; 2026*
 
 <br/>
 
